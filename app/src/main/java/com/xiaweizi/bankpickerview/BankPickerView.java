@@ -44,7 +44,7 @@ public class BankPickerView extends ScrollView {
     private int displayItemCount; // 每页显示的数量
     private int selectedIndex = 1;
     private List<String> items;
-    public static final int OFF_SET_DEFAULT = 1;
+    public static final int OFF_SET_DEFAULT = 110;
     private int offset = OFF_SET_DEFAULT; // 偏移量（需要在最前面和最后面补全）
     private int initialY;
     private Runnable scrollerTask;
