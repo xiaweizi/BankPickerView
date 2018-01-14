@@ -8,11 +8,13 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -26,22 +28,39 @@ import java.util.List;
  *     class  : com.xiaweizi.bankpickerview.BankPickerView
  *     e-mail : 1012126908@qq.com
  *     time   : 2018/01/14
- *     desc   :
+ *     desc   : 银行选择 view
  * </pre>
  */
 
 public class BankPickerView extends ScrollView {
-    public static final String TAG = BankPickerView.class.getSimpleName();
+    public static final String TAG = "BankPickerView:";
 
     public interface OnWheelViewListener {
         void onSelected(int selectedIndex, String item);
     }
 
-
     private Context context;
-//    private ScrollView scrollView;
-
     private LinearLayout views;
+    private int displayItemCount; // 每页显示的数量
+    private int selectedIndex = 1;
+    private List<String> items;
+    public static final int OFF_SET_DEFAULT = 1;
+    private int offset = OFF_SET_DEFAULT; // 偏移量（需要在最前面和最后面补全）
+    private int initialY;
+    private Runnable scrollerTask;
+    private int newCheck = 50;
+    private int itemHeight = 0;
+
+    private int scrollDirection = -1;
+    private static final int SCROLL_DIRECTION_UP = 0;
+    private static final int SCROLL_DIRECTION_DOWN = 1;
+
+    private Paint paint;
+    private int viewWidth;
+    /**
+     * 获取选中区域的边界
+     */
+    private int[] selectedAreaBorder;
 
     public BankPickerView(Context context) {
         super(context);
@@ -58,33 +77,25 @@ public class BankPickerView extends ScrollView {
         init(context);
     }
 
-    //    String[] items;
-    List<String> items;
-
     private List<String> getItems() {
         return items;
     }
 
     public void setItems(List<String> list) {
         if (null == items) {
-            items = new ArrayList<String>();
+            items = new ArrayList<>();
         }
         items.clear();
         items.addAll(list);
-
         // 前面和后面补全
         for (int i = 0; i < offset; i++) {
+            // 添加一条空数据
             items.add(0, "");
             items.add("");
         }
-
         initData();
-
     }
 
-
-    public static final int OFF_SET_DEFAULT = 1;
-    int offset = OFF_SET_DEFAULT; // 偏移量（需要在最前面和最后面补全）
 
     public int getOffset() {
         return offset;
@@ -93,11 +104,6 @@ public class BankPickerView extends ScrollView {
     public void setOffset(int offset) {
         this.offset = offset;
     }
-
-    int displayItemCount; // 每页显示的数量
-
-    int selectedIndex = 1;
-
 
     private void init(Context context) {
         this.context = context;
@@ -150,11 +156,6 @@ public class BankPickerView extends ScrollView {
 
     }
 
-    int initialY;
-
-    private Runnable scrollerTask;
-    int newCheck = 50;
-
     public void startScrollerTask() {
         initialY = getScrollY();
         this.postDelayed(scrollerTask, newCheck);
@@ -169,12 +170,14 @@ public class BankPickerView extends ScrollView {
         refreshItemView(0);
     }
 
-    int itemHeight = 0;
-
     private View createView(String item) {
         View view = View.inflate(getContext(), R.layout.test, null);
         TextView content = view.findViewById(R.id.tv_content);
+        ImageView bank = view.findViewById(R.id.iv_bank);
         content.setText(item);
+        if (!TextUtils.isEmpty(item)) {
+            bank.setBackgroundResource(R.drawable.ic_launcher_background);
+        }
         if (0 == itemHeight) {
             itemHeight = getViewMeasuredHeight(view);
             Log.d(TAG, "itemHeight: " + itemHeight);
@@ -182,6 +185,7 @@ public class BankPickerView extends ScrollView {
             LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) this.getLayoutParams();
             this.setLayoutParams(new LinearLayout.LayoutParams(lp.width, itemHeight * displayItemCount));
         }
+
         return view;
     }
 
@@ -198,8 +202,6 @@ public class BankPickerView extends ScrollView {
             scrollDirection = SCROLL_DIRECTION_UP;
 
         }
-
-
     }
 
     private void refreshItemView(int y) {
@@ -213,28 +215,22 @@ public class BankPickerView extends ScrollView {
             if (remainder > itemHeight / 2) {
                 position = divided + offset + 1;
             }
-
-}
+        }
 
         int childSize = views.getChildCount();
-        // TODO: 2018/1/14 更新单个view 的颜色
-//        for (int i = 0; i < childSize; i++) {
-//            TextView itemView = (TextView) views.getChildAt(i);
-//            if (null == itemView) {
-//                return;
-//            }
-//            if (position == i) {
-//                itemView.setTextColor(Color.parseColor("#0288ce"));
-//            } else {
-//                itemView.setTextColor(Color.parseColor("#bbbbbb"));
-//            }
-//        }
+        for (int i = 0; i < childSize; i++) {
+            View itemView = views.getChildAt(i);
+            if (null == itemView) {
+                return;
+            }
+            if (position == i) {
+                itemView.setAlpha(1);
+            } else {
+                itemView.setAlpha(0.8f);
+            }
+        }
     }
 
-    /**
-     * 获取选中区域的边界
-     */
-    int[] selectedAreaBorder;
 
     private int[] obtainSelectedAreaBorder() {
         if (null == selectedAreaBorder) {
@@ -245,13 +241,6 @@ public class BankPickerView extends ScrollView {
         return selectedAreaBorder;
     }
 
-
-    private int scrollDirection = -1;
-    private static final int SCROLL_DIRECTION_UP = 0;
-    private static final int SCROLL_DIRECTION_DOWN = 1;
-
-    private Paint paint;
-    private int viewWidth;
 
     @Override
     public void setBackgroundDrawable(Drawable background) {
@@ -348,11 +337,9 @@ public class BankPickerView extends ScrollView {
     }
 
     private OnWheelViewListener onWheelViewListener;
-
     public OnWheelViewListener getOnWheelViewListener() {
         return onWheelViewListener;
     }
-
     public void setOnWheelViewListener(OnWheelViewListener onWheelViewListener) {
         this.onWheelViewListener = onWheelViewListener;
     }
