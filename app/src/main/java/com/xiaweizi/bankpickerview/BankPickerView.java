@@ -33,9 +33,8 @@ import java.util.List;
 public class BankPickerView extends ScrollView {
     public static final String TAG = BankPickerView.class.getSimpleName();
 
-    public static class OnWheelViewListener {
-        public void onSelected(int selectedIndex, String item) {
-        }
+    public interface OnWheelViewListener {
+        void onSelected(int selectedIndex, String item);
     }
 
 
@@ -103,12 +102,8 @@ public class BankPickerView extends ScrollView {
     private void init(Context context) {
         this.context = context;
 
-//        scrollView = ((ScrollView)this.getParent());
-//        Log.d(TAG, "scrollview: " + scrollView);
         Log.d(TAG, "parent: " + this.getParent());
-//        this.setOrientation(VERTICAL);
         this.setVerticalScrollBarEnabled(false);
-
         views = new LinearLayout(context);
         views.setOrientation(LinearLayout.VERTICAL);
         this.addView(views);
@@ -116,45 +111,38 @@ public class BankPickerView extends ScrollView {
         scrollerTask = new Runnable() {
 
             public void run() {
-
                 int newY = getScrollY();
                 if (initialY - newY == 0) { // stopped
                     final int remainder = initialY % itemHeight;
                     final int divided = initialY / itemHeight;
-//                    Log.d(TAG, "initialY: " + initialY);
-//                    Log.d(TAG, "remainder: " + remainder + ", divided: " + divided);
                     if (remainder == 0) {
                         selectedIndex = divided + offset;
 
-                        onSeletedCallBack();
+                        onSelectedCallBack();
                     } else {
                         if (remainder > itemHeight / 2) {
-                            BankPickerView.this.post(new Runnable() {
+                            post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    BankPickerView.this.smoothScrollTo(0, initialY - remainder + itemHeight);
+                                    smoothScrollTo(0, initialY - remainder + itemHeight);
                                     selectedIndex = divided + offset + 1;
-                                    onSeletedCallBack();
+                                    onSelectedCallBack();
                                 }
                             });
                         } else {
-                            BankPickerView.this.post(new Runnable() {
+                            post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    BankPickerView.this.smoothScrollTo(0, initialY - remainder);
+                                    smoothScrollTo(0, initialY - remainder);
                                     selectedIndex = divided + offset;
-                                    onSeletedCallBack();
+                                    onSelectedCallBack();
                                 }
                             });
                         }
-
-
                     }
-
-
                 } else {
                     initialY = getScrollY();
-                    BankPickerView.this.postDelayed(scrollerTask, newCheck);
+                    postDelayed(scrollerTask, newCheck);
                 }
             }
         };
@@ -164,11 +152,10 @@ public class BankPickerView extends ScrollView {
 
     int initialY;
 
-    Runnable scrollerTask;
+    private Runnable scrollerTask;
     int newCheck = 50;
 
     public void startScrollerTask() {
-
         initialY = getScrollY();
         this.postDelayed(scrollerTask, newCheck);
     }
@@ -179,21 +166,12 @@ public class BankPickerView extends ScrollView {
         for (String item : items) {
             views.addView(createView(item));
         }
-
         refreshItemView(0);
     }
 
     int itemHeight = 0;
 
     private View createView(String item) {
-//        TextView tv = new TextView(context);
-//        tv.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        tv.setSingleLine(true);
-//        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-//        tv.setText(item);
-//        tv.setGravity(Gravity.CENTER);
-//        int padding = dip2px(15);
-//        tv.setPadding(padding, padding, padding, padding);
         View view = View.inflate(getContext(), R.layout.test, null);
         TextView content = view.findViewById(R.id.tv_content);
         content.setText(item);
@@ -211,26 +189,7 @@ public class BankPickerView extends ScrollView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-
-//        Log.d(TAG, "l: " + l + ", t: " + t + ", oldl: " + oldl + ", oldt: " + oldt);
-
-//        try {
-//            Field field = ScrollView.class.getDeclaredField("mScroller");
-//            field.setAccessible(true);
-//            OverScroller mScroller = (OverScroller) field.get(this);
-//
-//
-//            if(mScroller.isFinished()){
-//                Log.d(TAG, "isFinished...");
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-
         refreshItemView(t);
-
         if (t > oldt) {
 //            Log.d(TAG, "向下滚动");
             scrollDirection = SCROLL_DIRECTION_DOWN;
@@ -255,33 +214,10 @@ public class BankPickerView extends ScrollView {
                 position = divided + offset + 1;
             }
 
-//            if(remainder > itemHeight / 2){
-//                if(scrollDirection == SCROLL_DIRECTION_DOWN){
-//                    position = divided + offset;
-//                    Log.d(TAG, ">down...position: " + position);
-//                }else if(scrollDirection == SCROLL_DIRECTION_UP){
-//                    position = divided + offset + 1;
-//                    Log.d(TAG, ">up...position: " + position);
-//                }
-//            }else{
-////                position = y / itemHeight + offset;
-//                if(scrollDirection == SCROLL_DIRECTION_DOWN){
-//                    position = divided + offset;
-//                    Log.d(TAG, "<down...position: " + position);
-//                }else if(scrollDirection == SCROLL_DIRECTION_UP){
-//                    position = divided + offset + 1;
-//                    Log.d(TAG, "<up...position: " + position);
-//                }
-//            }
-//        }
-
-//        if(scrollDirection == SCROLL_DIRECTION_DOWN){
-//            position = divided + offset;
-//        }else if(scrollDirection == SCROLL_DIRECTION_UP){
-//            position = divided + offset + 1;
-        }
+}
 
         int childSize = views.getChildCount();
+        // TODO: 2018/1/14 更新单个view 的颜色
 //        for (int i = 0; i < childSize; i++) {
 //            TextView itemView = (TextView) views.getChildAt(i);
 //            if (null == itemView) {
@@ -314,8 +250,8 @@ public class BankPickerView extends ScrollView {
     private static final int SCROLL_DIRECTION_UP = 0;
     private static final int SCROLL_DIRECTION_DOWN = 1;
 
-    Paint paint;
-    int viewWidth;
+    private Paint paint;
+    private int viewWidth;
 
     @Override
     public void setBackgroundDrawable(Drawable background) {
@@ -370,7 +306,7 @@ public class BankPickerView extends ScrollView {
     /**
      * 选中回调
      */
-    private void onSeletedCallBack() {
+    private void onSelectedCallBack() {
         if (null != onWheelViewListener) {
             onWheelViewListener.onSelected(selectedIndex, items.get(selectedIndex));
         }
@@ -383,7 +319,7 @@ public class BankPickerView extends ScrollView {
         this.post(new Runnable() {
             @Override
             public void run() {
-                BankPickerView.this.smoothScrollTo(0, p * itemHeight);
+                smoothScrollTo(0, p * itemHeight);
             }
         });
 
@@ -406,7 +342,6 @@ public class BankPickerView extends ScrollView {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_UP) {
-
             startScrollerTask();
         }
         return super.onTouchEvent(ev);

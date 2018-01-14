@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 100; i++) {
             data.add("数据" + i);
         }
-        mPickerView.setOffset(3);
+        mPickerView.setOffset(1);
         mPickerView.setItems(data);
         mPickerView.setOnWheelViewListener(new BankPickerView.OnWheelViewListener() {
             @Override
