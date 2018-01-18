@@ -294,7 +294,6 @@ public class BankPickerView extends ScrollView {
             }
         };
 
-
         super.setBackgroundDrawable(background);
 
     }

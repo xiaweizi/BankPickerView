@@ -1,0 +1,126 @@
+{
+  "status": 1000,
+  "desc": "Normal Returned",
+  "data": [
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "浦发银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/SPDB.png",
+      "numb": "310290000013"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "中国工商",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/ICBC.png",
+      "numb": "102100099996"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "农业银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/ABC.png",
+      "numb": "103100000026"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "中国银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/BOC.png",
+      "numb": "104100000004"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "建设银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/CCB.png",
+      "numb": "105100000017"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "交通银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/BCM.png",
+      "numb": "301290000007"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "中信银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/CITIC.png",
+      "numb": "302100011000"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "招商银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/CMB.png",
+      "numb": "308584000013"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "光大银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/CEB.png",
+      "numb": "303100000006"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "华夏银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/HXBANK.png",
+      "numb": "304100040000"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "民生银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/CMBC.png",
+      "numb": "305100000013"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "广发银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/BCM.png",
+      "numb": "306581000003"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "兴业银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/CIB.png",
+      "numb": "309391000011"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "平安银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/PAB.png",
+      "numb": "307584007998"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "恒丰银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/HF.png",
+      "numb": "315456000105"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "浙商银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/ZHESHANG.png",
+      "numb": "316331000018"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "渤海银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/BH.png",
+      "numb": "318110000014"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "中国邮储",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/PSBC.png",
+      "numb": "403100000004"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "北京银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/BOB.png",
+      "numb": "313100000013"
+    },
+    {
+      "summ": "单笔5万，日累计20万",
+      "name": "上海银行",
+      "logo": "http://oo6o93zxg.bkt.clouddn.com//BankInfo/BCM.png",
+      "numb": "325290000012"
+    }
+  ]
+}
