@@ -3,21 +3,22 @@ package com.xiaweizi.bankpickerview;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,15 +37,15 @@ public class BankPickerView extends ScrollView {
     public static final String TAG = "BankPickerView:";
 
     public interface OnWheelViewListener {
-        void onSelected(int selectedIndex, String item);
+        void onSelected(int selectedIndex, BankModel item);
     }
 
     private Context context;
     private LinearLayout views;
     private int displayItemCount; // 每页显示的数量
     private int selectedIndex = 1;
-    private List<String> items;
-    public static final int OFF_SET_DEFAULT = 110;
+    private List<BankModel> items;
+    public static final int OFF_SET_DEFAULT = 1;
     private int offset = OFF_SET_DEFAULT; // 偏移量（需要在最前面和最后面补全）
     private int initialY;
     private Runnable scrollerTask;
@@ -77,11 +78,11 @@ public class BankPickerView extends ScrollView {
         init(context);
     }
 
-    private List<String> getItems() {
+    private List<BankModel> getItems() {
         return items;
     }
 
-    public void setItems(List<String> list) {
+    public void setItems(List<BankModel> list) {
         if (null == items) {
             items = new ArrayList<>();
         }
@@ -90,9 +91,10 @@ public class BankPickerView extends ScrollView {
         // 前面和后面补全
         for (int i = 0; i < offset; i++) {
             // 添加一条空数据
-            items.add(0, "");
-            items.add("");
+            items.add(0, null);
+            items.add(null);
         }
+        Log.i(TAG, "size:" + items.size());
         initData();
     }
 
@@ -163,25 +165,27 @@ public class BankPickerView extends ScrollView {
 
     private void initData() {
         displayItemCount = offset * 2 + 1;
-
-        for (String item : items) {
+        views.removeAllViews();
+        for (BankModel item : items) {
             views.addView(createView(item));
         }
         refreshItemView(0);
     }
 
-    private View createView(String item) {
-        View view = View.inflate(getContext(), R.layout.test, null);
-        TextView content = view.findViewById(R.id.tv_content);
-        ImageView bank = view.findViewById(R.id.iv_bank);
-        content.setText(item);
-        if (!TextUtils.isEmpty(item)) {
-            bank.setBackgroundResource(R.drawable.ic_launcher_background);
+    private View createView(BankModel item) {
+        View view = View.inflate(getContext(), R.layout.item_bank_info, null);
+        ImageView logo = view.findViewById(R.id.iv_bank_logo);
+        TextView name = view.findViewById(R.id.tv_bank_name);
+        TextView desc = view.findViewById(R.id.tv_bank_description);
+        if (item != null) {
+            Glide.with(getContext()).load(item.bankLogo).into(logo);
+            name.setText(item.bankName);
+            desc.setText(item.bankDesc);
         }
         if (0 == itemHeight) {
             itemHeight = getViewMeasuredHeight(view);
             Log.d(TAG, "itemHeight: " + itemHeight);
-            views.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemHeight * displayItemCount));
+            views.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemHeight * displayItemCount));
             LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) this.getLayoutParams();
             this.setLayoutParams(new LinearLayout.LayoutParams(lp.width, itemHeight * displayItemCount));
         }
@@ -219,14 +223,25 @@ public class BankPickerView extends ScrollView {
 
         int childSize = views.getChildCount();
         for (int i = 0; i < childSize; i++) {
-            View itemView = views.getChildAt(i);
-            if (null == itemView) {
-                return;
-            }
-            if (position == i) {
-                itemView.setAlpha(1);
+            if (i == position) {
+                View itemView = views.getChildAt(i);
+                if (itemView != null) {
+                    itemView.setAlpha(1f);
+                }
+            } else if (i == position - 1 || i == position + 1){
+                View view1 = views.getChildAt(position - 1);
+                View view2 = views.getChildAt(position + 1);
+                if (view1 != null) {
+                    view1.setAlpha(0.65f);
+                }
+                if (view2 != null) {
+                    view2.setAlpha(0.65f);
+                }
             } else {
-                itemView.setAlpha(0.8f);
+                View itemView = views.getChildAt(i);
+                if (itemView != null) {
+                    itemView.setAlpha(0.4f);
+                }
             }
         }
     }
@@ -245,22 +260,22 @@ public class BankPickerView extends ScrollView {
     @Override
     public void setBackgroundDrawable(Drawable background) {
 
-        if (viewWidth == 0) {
+        if (viewWidth == 0 && context != null) {
             viewWidth = ((Activity) context).getWindowManager().getDefaultDisplay().getWidth();
             Log.d(TAG, "viewWidth: " + viewWidth);
         }
 
         if (null == paint) {
             paint = new Paint();
-            paint.setColor(Color.parseColor("#83cde6"));
+            paint.setColor(0xffff);
             paint.setStrokeWidth(dip2px(1f));
         }
 
         background = new Drawable() {
             @Override
             public void draw(Canvas canvas) {
-                canvas.drawLine(viewWidth * 1 / 6, obtainSelectedAreaBorder()[0], viewWidth * 5 / 6, obtainSelectedAreaBorder()[0], paint);
-                canvas.drawLine(viewWidth * 1 / 6, obtainSelectedAreaBorder()[1], viewWidth * 5 / 6, obtainSelectedAreaBorder()[1], paint);
+                canvas.drawLine(0, obtainSelectedAreaBorder()[0], viewWidth, obtainSelectedAreaBorder()[0], paint);
+                canvas.drawLine(0, obtainSelectedAreaBorder()[1], viewWidth, obtainSelectedAreaBorder()[1], paint);
             }
 
             @Override
@@ -296,7 +311,7 @@ public class BankPickerView extends ScrollView {
      * 选中回调
      */
     private void onSelectedCallBack() {
-        if (null != onWheelViewListener) {
+        if (null != onWheelViewListener && selectedIndex < items.size()) {
             onWheelViewListener.onSelected(selectedIndex, items.get(selectedIndex));
         }
 
@@ -314,7 +329,7 @@ public class BankPickerView extends ScrollView {
 
     }
 
-    public String getSeletedItem() {
+    public BankModel getSeletedItem() {
         return items.get(selectedIndex);
     }
 
@@ -337,14 +352,19 @@ public class BankPickerView extends ScrollView {
     }
 
     private OnWheelViewListener onWheelViewListener;
+
     public OnWheelViewListener getOnWheelViewListener() {
         return onWheelViewListener;
     }
+
     public void setOnWheelViewListener(OnWheelViewListener onWheelViewListener) {
         this.onWheelViewListener = onWheelViewListener;
     }
 
     private int dip2px(float dpValue) {
+        if (context == null) {
+            return 1;
+        }
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
