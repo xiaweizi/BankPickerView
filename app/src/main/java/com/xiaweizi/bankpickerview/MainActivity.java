@@ -2,6 +2,7 @@ package com.xiaweizi.bankpickerview;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +16,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mPickerView = findViewById(R.id.bank_picker_view);
-        mPickerView.setOffset(2);
 
-        List<BankModel> data = new ArrayList<>();
+        final List<BankModel> data = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             BankModel model = new BankModel();
             model.bankDesc = "desc" + i;
@@ -27,6 +27,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mPickerView.setItems(data);
+        final BankPopupWindow popupWindow = new BankPopupWindow(this);
+        popupWindow.setOnBankSelectListener(new BankPopupWindow.OnBankSelectListener() {
+            @Override
+            public void onBankSelect(BankModel model) {
+
+            }
+        });
+
+        findViewById(R.id.pop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.show();
+                popupWindow.setData(data);
+            }
+        });
     }
 
 }
