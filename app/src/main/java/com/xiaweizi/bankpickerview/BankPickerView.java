@@ -36,7 +36,7 @@ import java.util.List;
 public class BankPickerView extends ScrollView {
     public static final String TAG = "BankPickerView:";
 
-    public interface OnWheelViewListener {
+    public interface OnBankSelectedListener {
         void onSelected(int selectedIndex, BankModel item);
     }
 
@@ -82,7 +82,7 @@ public class BankPickerView extends ScrollView {
         return items;
     }
 
-    public void setItems(List<BankModel> list) {
+    public void setData(List<BankModel> list) {
         if (null == items) {
             items = new ArrayList<>();
         }
@@ -310,13 +310,13 @@ public class BankPickerView extends ScrollView {
      * 选中回调
      */
     private void onSelectedCallBack() {
-        if (null != onWheelViewListener && selectedIndex < items.size()) {
-            onWheelViewListener.onSelected(selectedIndex, items.get(selectedIndex));
+        if (null != onBankSelectedListener && selectedIndex < items.size()) {
+            onBankSelectedListener.onSelected(selectedIndex, items.get(selectedIndex));
         }
 
     }
 
-    public void setSeletion(int position) {
+    public void setSelection(int position) {
         final int p = position;
         selectedIndex = p + offset;
         this.post(new Runnable() {
@@ -325,7 +325,6 @@ public class BankPickerView extends ScrollView {
                 smoothScrollTo(0, p * itemHeight);
             }
         });
-
     }
 
     public BankModel getSeletedItem() {
@@ -350,14 +349,10 @@ public class BankPickerView extends ScrollView {
         return super.onTouchEvent(ev);
     }
 
-    private OnWheelViewListener onWheelViewListener;
+    private OnBankSelectedListener onBankSelectedListener;
 
-    public OnWheelViewListener getOnWheelViewListener() {
-        return onWheelViewListener;
-    }
-
-    public void setOnWheelViewListener(OnWheelViewListener onWheelViewListener) {
-        this.onWheelViewListener = onWheelViewListener;
+    public void setOnBankSelectedListener(OnBankSelectedListener onBankSelectedListener) {
+        this.onBankSelectedListener = onBankSelectedListener;
     }
 
     private int dip2px(float dpValue) {

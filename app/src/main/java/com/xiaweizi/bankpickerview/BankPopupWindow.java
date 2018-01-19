@@ -51,7 +51,7 @@ public class BankPopupWindow implements View.OnKeyListener {
         TextView tvConfirm = mView.findViewById(R.id.tv_bank_confirm);
         mPickerView = mView.findViewById(R.id.pv_bank);
         mPickerView.setOffset(2);
-        mPickerView.setOnWheelViewListener(new BankPickerView.OnWheelViewListener() {
+        mPickerView.setOnBankSelectedListener(new BankPickerView.OnBankSelectedListener() {
             @Override
             public void onSelected(int selectedIndex, BankModel item) {
                 mBankModel = item;
@@ -90,7 +90,7 @@ public class BankPopupWindow implements View.OnKeyListener {
     public void setData(List<BankModel> data) {
         if (data != null && mPickerView != null) {
             mData = data;
-            mPickerView.setItems(data);
+            mPickerView.setData(data);
         }
     }
 
@@ -102,7 +102,7 @@ public class BankPopupWindow implements View.OnKeyListener {
         int size = mData.size();
         for (int i = 0; i < size; i++) {
             if (TextUtils.equals(model.bankName, mData.get(i).bankName)) {
-                mPickerView.setSeletion(i);
+                mPickerView.setSelection(i);
             }
         }
     }
