@@ -36,10 +36,6 @@ import java.util.List;
 public class BankPickerView extends ScrollView {
     public static final String TAG = "BankPickerView:";
 
-    public interface OnBankSelectedListener {
-        void onSelected(int selectedIndex, BankModel item);
-    }
-
     private Context context;
     private LinearLayout views;
     private int displayItemCount; // 每页显示的数量
@@ -109,7 +105,6 @@ public class BankPickerView extends ScrollView {
 
     private void init(Context context) {
         this.context = context;
-
         Log.d(TAG, "parent: " + this.getParent());
         this.setVerticalScrollBarEnabled(false);
         views = new LinearLayout(context);
@@ -369,5 +364,11 @@ public class BankPickerView extends ScrollView {
         view.measure(width, expandSpec);
         return view.getMeasuredHeight();
     }
+
+
+    public interface OnBankSelectedListener {
+        void onSelected(int selectedIndex, BankModel item);
+    }
+
 
 }
