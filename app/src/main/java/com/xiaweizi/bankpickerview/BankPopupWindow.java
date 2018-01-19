@@ -68,7 +68,13 @@ public class BankPopupWindow implements View.OnKeyListener {
             public void onClick(View v) {
                 dismiss();
                 if (mListener != null) {
-                    mListener.onBankSelect(mBankModel);
+                    if (mBankModel == null) {
+                        if (mData != null && mData.size() > 0) {
+                            mListener.onBankSelect(mData.get(0));
+                        }
+                    } else {
+                        mListener.onBankSelect(mBankModel);
+                    }
                 }
             }
         });
@@ -90,7 +96,9 @@ public class BankPopupWindow implements View.OnKeyListener {
     public void setData(List<BankModel> data) {
         if (data != null && mPickerView != null) {
             mData = data;
-            mPickerView.setData(data);
+            if (mPickerView.getData() == null || mPickerView.getData().size() <= 0) {
+                mPickerView.setData(data);
+            }
         }
     }
 

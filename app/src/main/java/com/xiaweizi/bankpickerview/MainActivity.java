@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 mBankName2.setText(model.bankName);
             }
         });
-        findViewById(R.id.pop).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.rl_bank_select).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popupWindow.show();

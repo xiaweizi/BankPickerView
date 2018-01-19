@@ -78,7 +78,7 @@ public class BankPickerView extends ScrollView {
         init(context);
     }
 
-    private List<BankModel> getItems() {
+    public List<BankModel> getData() {
         return items;
     }
 
@@ -267,8 +267,8 @@ public class BankPickerView extends ScrollView {
 
         if (null == paint) {
             paint = new Paint();
-            paint.setColor(0xffff);
-            paint.setStrokeWidth(dip2px(1f));
+            paint.setColor(getResources().getColor(R.color.line_color));
+            paint.setStrokeWidth(dip2px(0.5f));
         }
 
         background = new Drawable() {

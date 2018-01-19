@@ -28,7 +28,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@id/tv_bank_title"
-            android:text="选择银行" />
+            android:text="请选择银行" />
 
     </RelativeLayout>
 
@@ -38,6 +38,7 @@
         android:layout_height="wrap_content" />
 
     <RelativeLayout
+        android:id="@+id/rl_bank_select"
         android:layout_width="match_parent"
         android:layout_height="60dp">
 
@@ -58,17 +59,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@id/tv_bank_title1"
-            android:text="选择银行" />
+            android:text="请选择银行" />
 
     </RelativeLayout>
-    <Button
-        android:id="@+id/pop"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:padding="12dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_bg"
-        android:text="弹出 popupWindow" />
-
 
 </LinearLayout>
